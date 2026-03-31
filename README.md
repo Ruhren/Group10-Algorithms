@@ -1,6 +1,7 @@
 # Group10-Algorithms
 
-Developer: Kiara
-Analyzer: Ruha
-Documentor: Milena
-Communicator: Liza
+Roles: 
+- Developer: Kiara 
+- Analyzer: Ruha
+- Documentor: Milena
+- Communicator: Liza
