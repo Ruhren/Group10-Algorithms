@@ -62,5 +62,29 @@ public class SortFunctions {
 
         return j; // return index of item now known to be in place
     }
+
+    //helper function to get max value of the integer[]
+
+    static public int getMax(int[] array){
+        int max = array[0];
+        for(int i = 0 ; i < array.length ; i++){
+            if(array[i] > max){
+                max = array[i];
+            }
+        }
+        return max;
+    }
+
+    //helper function to get min value of the int[]
+
+    static public int getMin(int[] array){
+        int min = array[0];
+        for(int i = 0 ; i < array.length ; i++){
+            if(array[i] < min){
+                min = array[i];
+            }
+        }
+        return min;
+    }
 }
 

@@ -1,6 +1,6 @@
 public class QuickCountingSort {
     // combined value range and partition size
-    private static final int THRESHOLD = 5000;
+    private static final int THRESHOLD = 1000;
 
     public static void sort(int[] arr) {
         if (arr == null || arr.length == 0) {
