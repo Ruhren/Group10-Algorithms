@@ -13,6 +13,14 @@ public class SortFunctions {
         return arr;
     }
 
+    public static void createSortedArr(int n ){
+        int[] arr = new int[n];
+
+        for(int i = 0; i < n; i++){
+            arr[i] = i;
+        }
+    }
+
     public static void quickSortModified(int[] arr, int low, int high, int maxValue, int minValue, int threshold) {
         // loop with the (range + size > threshold) check
         while ((low < high) && (maxValue - minValue + high - low > threshold)) {
