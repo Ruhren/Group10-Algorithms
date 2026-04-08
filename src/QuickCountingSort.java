@@ -2,74 +2,71 @@ public class QuickCountingSort {
     // combined value range and partition size
     private static final int THRESHOLD = 1000;
 
-    public static void sort(int[] arr) {
+    public static void sort(int[] arr, int max, int min) {
         if (arr == null || arr.length == 0) {
             return;
         }
 
-        // find initial min and max values
-        int min = arr[0];
-        int max = arr[0];
+        // preprocessing step: modified quicksort to partition the array
+        // this will stop partitioning once it hits the THRESHOLD
+        SortFunctions.quickSortModified(arr, 0, arr.length - 1, max, min, THRESHOLD);
 
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i] < min) {
-                min = arr[i];
-            }
-
-            if (arr[i] > max) {
-                max = arr[i];
-            }
-        }
-
-        // preprocessing step: modified quicksort
-        quickSortModified(arr, 0, arr.length - 1, max, min);
+        // then sort partitions individually
+        finishSorting(arr, 0, arr.length - 1, max, min);
     }
 
-    private static void quickSortModified(int[] arr, int lo, int hi, int max, int min) {
-        // switch to counting sort when combined range and partition size reach the threshold
-        if ((max - min + (hi - lo)) <= THRESHOLD) {
-            countingSort(arr, lo, hi, min, max);
+    private static void finishSorting(int[] arr, int low, int high, int max, int min) {
+        if (low >= high) {
             return;
         }
 
-        if (lo < hi) {
-            int pivotIndex = SortFunctions.partitionArr(arr, lo, hi);
-            int mid = arr[pivotIndex];
+        // if partition reaches the threshold, it is skipped
+        if ((max - min + (high - low)) <= THRESHOLD) {
+            // sort only these partitions
+            countingSort(arr, low, high, max);
+        } else {
+            // find the pivot index from the previous partition
+            int pivot = SortFunctions.partition(arr, low, high);
+            int midValue = arr[pivot];
 
-            // narrow the value range
-            // left side: all numbers now between min and mid
-            quickSortModified(arr, lo, pivotIndex - 1, mid, min);
-            // right side: all numbers now between mid and max
-            quickSortModified(arr, pivotIndex + 1, hi, max, mid);
+            // search left and right sides using pivot as new max / min
+            finishSorting(arr, low, pivot - 1, midValue, min);
+            finishSorting(arr, pivot + 1, high, max, midValue);
         }
     }
 
-    private static void countingSort(int[] arr, int lo, int hi, int min, int max) {
-        int n = hi - lo + 1;
-        int range = max - min + 1;
+    private static void countingSort(int[] arr, int low, int high, int max) {
+        int n = high - low + 1;
 
-        int[] count = new int[range];
-        int[] output = new int[n];
+        // note: max = range
 
-        // frequency count with offset
-        for (int i = lo; i <= hi; i++) {
-            count[arr[i] - min]++;
+        int[] output = new int[n + 1];
+        int[] count = new int[max + 1];
+
+        // initialise count array to 0
+        for (int i = 0; i <= max; i++) {
+            count[i] = 0;
         }
 
-        // prefix sum
-        for (int i = 1; i < range; i++) {
+        // frequency count
+        for (int i = low; i <= high; i++) {
+            count[arr[i]]++;
+        }
+
+        // cumulative count
+        for (int i = 1; i <= max; i++) {
             count[i] += count[i - 1];
         }
 
         // construct output array
-        for (int i = hi; i >= lo; i--) {
-            output[count[arr[i] - min] - 1] = arr[i];
-            count[arr[i] - min]--;
+        for (int i = high; i >= low; i--) {
+            output[count[arr[i]]] = arr[i];
+            count[arr[i]] -= 1;
         }
 
-        // copy back to specific section of the original array
+        // copy back to original array
         for (int i = 0; i < n; i++) {
-            arr[lo + i] = output[i];
+            arr[low + i] = output[i + 1];
         }
     }
 }

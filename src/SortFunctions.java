@@ -2,18 +2,7 @@ import java.util.Random;
 
 public class SortFunctions {
 
-    public static int[] createArr(int n) {
-        int[] arr = new int[n];
-        Random random = new Random();
-
-        for (int i = 0; i < n; i++) {
-            arr[i] = random.nextInt(n + 1);
-        }
-
-        return arr;
-    }
-
-    public static int[] createArrRange(int n, int r) {
+    public static int[] createArr(int n, int r) {
         int[] arr = new int[n];
         Random random = new Random();
 
@@ -24,28 +13,36 @@ public class SortFunctions {
         return arr;
     }
 
-    private static void swap(int[] a, int i, int j) {
-        int temp = a[i];
-        a[i] = a[j];
-        a[j] = temp;
+    public static void quickSortModified(int[] arr, int low, int high, int maxValue, int minValue, int threshold) {
+        // loop with the (range + size > threshold) check
+        while ((low < high) && (maxValue - minValue + high - low > threshold)) {
+            int pivot = partition(arr, low, high);
+            int midValue = arr[pivot];
+
+            // recursive call for the left side
+            quickSortModified(arr, low, pivot - 1, midValue, minValue, threshold);
+
+            // recursive call for the right side
+            quickSortModified(arr, pivot + 1, high, maxValue, midValue, threshold);
+        }
     }
 
-    public static int partitionArr(int[] a, int lo, int hi) {
-        int i = lo;
-        int j = hi + 1;
-        int pivot = a[lo]; // use first element as pivot
+    public static int partition(int[] arr, int low, int high) {
+        int i = low;
+        int j = high + 1;
+        int pivot = arr[low]; // use first element as pivot
 
         while (true) {
-            // find item on lo to swap
-            while (a[++i] <= pivot) {
-                if (i == hi) {
+            // find item on low to swap
+            while (i < high && arr[++i] <= pivot) {
+                if (i == high) {
                     break;
                 }
             }
 
-            // find item on hi to swap
-            while (pivot <= a[--j]) {
-                if (j == lo) {
+            // find item on high to swap
+            while (j > low && pivot <= arr[--j]) {
+                if (j == low) {
                     break;
                 }
             }
@@ -55,33 +52,41 @@ public class SortFunctions {
                 break;
             }
 
-            swap(a, i, j);
+            swap(arr, i, j);
         }
         // put pivot into position
-        swap(a, lo, j);
+        swap(arr, low, j);
 
         return j; // return index of item now known to be in place
     }
 
-    //helper function to get max value of the integer[]
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
 
-    static public int getMax(int[] array){
-        int max = array[0];
-        for(int i = 0 ; i < array.length ; i++){
-            if(array[i] > max){
-                max = array[i];
+    // helper function to get max value of the int[]
+
+    public static int getMax(int[] arr) {
+        int max = arr[0];
+
+        for(int i = 0 ; i < arr.length ; i++) {
+            if(arr[i] > max){
+                max = arr[i];
             }
         }
         return max;
     }
 
-    //helper function to get min value of the int[]
+    // helper function to get min value of the int[]
 
-    static public int getMin(int[] array){
-        int min = array[0];
-        for(int i = 0 ; i < array.length ; i++){
-            if(array[i] < min){
-                min = array[i];
+    public static int getMin(int[] arr) {
+        int min = arr[0];
+
+        for(int i = 0 ; i < arr.length ; i++) {
+            if(arr[i] < min){
+                min = arr[i];
             }
         }
         return min;

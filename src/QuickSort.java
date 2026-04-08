@@ -1,18 +1,19 @@
 public class QuickSort {
     public static void sort(int[] arr) {
-        if (arr == null || arr.length <= 1) {
+        if (arr == null || arr.length == 0) {
             return;
         }
-        sortArr(arr, 0, arr.length - 1);
+
+        quickSort(arr, 0, arr.length - 1);
     }
 
-    private static void sortArr(int[] a, int lo, int hi) {
-        if (hi <= lo) {
+    private static void quickSort(int[] arr, int low, int high) {
+        if (high <= low) {
             return;
         }
 
-        int j = SortFunctions.partitionArr(a, lo, hi);
-        sortArr(a, lo, j - 1);
-        sortArr(a, j + 1, hi);
+        int j = SortFunctions.partition(arr, low, high);
+        quickSort(arr, low, j - 1);
+        quickSort(arr, j + 1, high);
     }
 }
