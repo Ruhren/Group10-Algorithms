@@ -3,9 +3,8 @@ public class QuickInsertionSort {
     private static final int THRESHOLD = 10;
 
     public static void sort(int[] arr) {
-        if (arr == null || arr.length == 0) {
-            return;
-        }
+        if (arr == null || arr.length == 0) return;
+
 
         // preprocessing step: modified quicksort to partition the array
         // this will stop partitioning once it hits the THRESHOLD

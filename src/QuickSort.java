@@ -1,8 +1,6 @@
 public class QuickSort {
     public static void sort(int[] arr) {
-        if (arr == null || arr.length == 0) {
-            return;
-        }
+        if (arr == null || arr.length == 0) return;
 
         quickSort(arr, 0, arr.length - 1);
     }

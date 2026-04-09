@@ -13,15 +13,14 @@ public class SortFunctions {
         return arr;
     }
 
-    public static int[] createSortedArr(int n ){
+    public static int[] createSortedArr(int n ) {
         int[] arr = new int[n];
 
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < n; i++) {
             arr[i] = i;
         }
 
         return arr;
-
     }
 
     public static void quickSortModified(int[] arr, int low, int high, int maxValue, int minValue, int threshold) {
@@ -37,75 +36,53 @@ public class SortFunctions {
             quickSortModified(arr, pivot + 1, high, maxValue, midValue, threshold);
         }
     }
-    //median-of-three partioning
+
+    // Median of three partitioning
 
     public static int partition(int[] arr, int low, int high) {
+        int mid = low + (high - low) / 2;
+
+        // Order low, mid, high
+        if (arr[mid] < arr[low]) {
+            swap(arr, mid, low);
+        }
+        if (arr[high] < arr[low]) {
+            swap(arr, high, low);
+        }
+        if (arr[high] < arr[mid]) {
+            swap(arr, high, mid);
+        }
+
+        // Use median as pivot
+        // Move median (arr[mid]) to the beginning
+        swap(arr, low, mid);
+
+        int pivot = arr[low];
+
         int i = low;
         int j = high + 1;
-        int pivot = arr[low]; // use first element as pivot
 
+        // Standard partitioning
         while (true) {
-            // find item on low to swap
-            while (i < high && arr[++i] <= pivot) {
-                if (i == high) {
-                    break;
-                }
-            }
 
-            // find item on high to swap
-            while (j > low && pivot <= arr[--j]) {
-                if (j == low) {
-                    break;
-                }
-            }
+            // scan from left
+            while (i < high && arr[++i] < pivot) {}
 
-            // check if pointers cross
-            if (i >= j) {
-                break;
-            }
+            // scan from right
+            while (j > low && arr[--j] > pivot) {}
+
+            if (i >= j) break;
 
             swap(arr, i, j);
         }
-        // put pivot into position
+
+        // place pivot in correct position
         swap(arr, low, j);
 
-        return j; // return index of item now known to be in place
+        return j;
     }
 
-//    public static int partition(int[] arr, int low, int high) {
-//        int i = low;
-//        int j = high + 1;
-//        int pivot = arr[low]; // use first element as pivot
-//
-//        while (true) {
-//            // find item on low to swap
-//            while (i < high && arr[++i] <= pivot) {
-//                if (i == high) {
-//                    break;
-//                }
-//            }
-//
-//            // find item on high to swap
-//            while (j > low && pivot <= arr[--j]) {
-//                if (j == low) {
-//                    break;
-//                }
-//            }
-//
-//            // check if pointers cross
-//            if (i >= j) {
-//                break;
-//            }
-//
-//            swap(arr, i, j);
-//        }
-//        // put pivot into position
-//        swap(arr, low, j);
-//
-//        return j; // return index of item now known to be in place
-//    }
-
-    private static void swap(int[] arr, int i, int j) {
+    public static void swap(int[] arr, int i, int j) {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
