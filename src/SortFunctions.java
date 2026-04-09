@@ -7,7 +7,7 @@ public class SortFunctions {
         Random random = new Random();
 
         for (int i = 0; i < n; i++) {
-            arr[i] = random.nextInt(r + 1);
+            arr[i] = random.nextInt(r );
         }
 
         return arr;
@@ -26,7 +26,7 @@ public class SortFunctions {
 
     public static void quickSortModified(int[] arr, int low, int high, int maxValue, int minValue, int threshold) {
         // loop with the (range + size > threshold) check
-        while ((low < high) && (maxValue - minValue + high - low > threshold)) {
+        if ((low < high) && (maxValue - minValue + high - low > threshold)) {
             int pivot = partition(arr, low, high);
             int midValue = arr[pivot];
 
@@ -37,6 +37,7 @@ public class SortFunctions {
             quickSortModified(arr, pivot + 1, high, maxValue, midValue, threshold);
         }
     }
+    //median-of-three partioning
 
     public static int partition(int[] arr, int low, int high) {
         int i = low;
@@ -70,6 +71,39 @@ public class SortFunctions {
 
         return j; // return index of item now known to be in place
     }
+
+//    public static int partition(int[] arr, int low, int high) {
+//        int i = low;
+//        int j = high + 1;
+//        int pivot = arr[low]; // use first element as pivot
+//
+//        while (true) {
+//            // find item on low to swap
+//            while (i < high && arr[++i] <= pivot) {
+//                if (i == high) {
+//                    break;
+//                }
+//            }
+//
+//            // find item on high to swap
+//            while (j > low && pivot <= arr[--j]) {
+//                if (j == low) {
+//                    break;
+//                }
+//            }
+//
+//            // check if pointers cross
+//            if (i >= j) {
+//                break;
+//            }
+//
+//            swap(arr, i, j);
+//        }
+//        // put pivot into position
+//        swap(arr, low, j);
+//
+//        return j; // return index of item now known to be in place
+//    }
 
     private static void swap(int[] arr, int i, int j) {
         int temp = arr[i];
