@@ -2,41 +2,54 @@ public class QuickCountingSort {
 
     private static final int THRESHOLD = 1000;
 
-    public static void sort(int[] arr, int max, int min) {
-        if (arr == null || arr.length == 0) return;
-
-        hybridSort(arr, 0, arr.length - 1, min, max);
+    public static class SortResults {
+        public double preprocessingTime = 0;
+        public double countingSortTime = 0;
+        public double totalTime = 0;
     }
 
-    private static void hybridSort(int[] arr, int low, int high, int min, int max) {
+    public static SortResults sortWithTimers(int[] arr) {
+        SortResults results = new SortResults();
+        if (arr == null || arr.length == 0) return results;
 
-        if (low >= high) return;
+        int min = SortFunctions.getMin(arr);
+        int max = SortFunctions.getMax(arr);
 
-        int size = high - low + 1;
+        hybridSort(arr, 0, arr.length - 1, max, min, results);
 
-        if ((max - min) + size <= THRESHOLD) {
-            // Recompute real min/max for this partition
-            int localMin = arr[low];
-            int localMax = arr[low];
+        results.totalTime = results.preprocessingTime + results.countingSortTime;
+        return results;
+    }
 
-            for (int i = low + 1; i <= high; i++) {
-                if (arr[i] < localMin) localMin = arr[i];
-                if (arr[i] > localMax) localMax = arr[i];
+    private static void hybridSort(int[] arr, int low, int high, int maxValue, int minValue, SortResults res) {
+        // Base case: range and size is small enough for cache
+        if ((maxValue - minValue) + (high - low) <= THRESHOLD) {
+            if (low < high) {
+                long startCount = System.nanoTime();
+                subPartitionCountingSort(arr, low, high, minValue, maxValue);
+                long endCount = System.nanoTime();
+                res.countingSortTime += (endCount - startCount) / 1_000_000.0;
             }
-
-            countingSort(arr, low, high, localMin, localMax);
             return;
         }
 
-        int pivot = SortFunctions.partition(arr, low, high);
-        int midValue = arr[pivot];
+        // Preprocessing step: partitioning
+        long startPre = System.nanoTime();
+        int pivotIndex = SortFunctions.partition(arr, low, high);
+        int midValue = arr[pivotIndex];
+        long endPre = System.nanoTime();
+        res.preprocessingTime += (endPre - startPre) / 1_000_000.0;
 
-        // Recurse on left and right
-        hybridSort(arr, low, pivot - 1, min, midValue);
-        hybridSort(arr, pivot + 1, high, midValue, max);
+        // Recursive calls to left and right sides
+        if (low < pivotIndex - 1) {
+            hybridSort(arr, low, pivotIndex - 1, midValue, minValue, res);
+        }
+        if (pivotIndex + 1 < high) {
+            hybridSort(arr, pivotIndex + 1, high, maxValue, midValue, res);
+        }
     }
 
-    public static void countingSort(int[] arr, int low, int high, int min, int max) {
+    public static void subPartitionCountingSort(int[] arr, int low, int high, int min, int max) {
         int n = high - low + 1;
         int range = max - min + 1;
 

@@ -5,7 +5,6 @@ public class QuickInsertionSort {
     public static void sort(int[] arr) {
         if (arr == null || arr.length == 0) return;
 
-
         // preprocessing step: modified quicksort to partition the array
         // this will stop partitioning once it hits the THRESHOLD
         SortFunctions.quickSortModified(arr, 0, arr.length - 1, SortFunctions.getMax(arr), SortFunctions.getMin(arr), THRESHOLD);

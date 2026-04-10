@@ -31,7 +31,6 @@ public class SortFunctions {
 
             // recursive call for the left side
             quickSortModified(arr, low, pivot - 1, midValue, minValue, threshold);
-
             // recursive call for the right side
             quickSortModified(arr, pivot + 1, high, maxValue, midValue, threshold);
         }

@@ -8,7 +8,6 @@
 
 public class Experiment {
 
-    private static final int THRESHOLD = 1000;
     private static final int RUNS = 10;
 
     // Helper function to check if array is sorted
@@ -23,57 +22,45 @@ public class Experiment {
 
     // Helper function to warm up JVM
     private static void warmup(int iterations, int n, int r) {
+        System.out.println("Starting warmup...");
+
         for (int i = 0; i < iterations; i++) {
             // warm up for random array
             int[] randomArr = SortFunctions.createArr(n, r);
             int[] randomArr1 = randomArr.clone();
             int[] randomArr2 = randomArr.clone();
-
-            int max = SortFunctions.getMax(randomArr);
-            int min = SortFunctions.getMin(randomArr);
+            int[] randomArr3 = randomArr.clone();
 
             QuickSort.sort(randomArr);
             QuickInsertionSort.sort(randomArr1);
-            QuickCountingSort.sort(randomArr2, max, min);
+            QuickCountingSort.sortWithTimers(randomArr2);
+            CountingSort.sort(randomArr3);
 
             // warm up for sorted array
             int[] sortedArr = SortFunctions.createSortedArr(n);
             int[] sortedArr1 = sortedArr.clone();
             int[] sortedArr2 = sortedArr.clone();
-
-            int sortedMax = SortFunctions.getMax(sortedArr);
-            int sortedMin = SortFunctions.getMin(sortedArr);
+            int[] sortedArr3 = sortedArr.clone();
 
             QuickSort.sort(sortedArr);
             QuickInsertionSort.sort(sortedArr1);
-            QuickCountingSort.sort(sortedArr2, sortedMax, sortedMin);
+            QuickCountingSort.sortWithTimers(sortedArr2);
+            CountingSort.sort(sortedArr3);
         }
+
+        System.out.println("Finished!");
     }
 
-    // Timer for classical counting sort
-    public static long timeCountingSort(int[] array) {
-        int maxVal = SortFunctions.getMax(array);
-        int minVal = SortFunctions.getMin(array);
+    // Timer for classic counting sort
+    public static long TimerCountingSort(int[] array) {
 
         long start = System.nanoTime();
-        QuickCountingSort.countingSort(array, 0, array.length - 1, minVal, maxVal);
+        CountingSort.sort(array);
         long end = System.nanoTime();
 
         if (!isSorted(array)) {
             throw new RuntimeException("Array is not sorted correctly.");
         }
-
-        return end - start;
-    }
-
-    // Timer for quickSortModified
-    public static long timeQuickSort(int[] array) {
-        int maxVal = SortFunctions.getMax(array);
-        int minVal = SortFunctions.getMin(array);
-
-        long start = System.nanoTime();
-        SortFunctions.quickSortModified(array,0,array.length -1, maxVal, minVal, THRESHOLD);
-        long end = System.nanoTime();
 
         return end - start;
     }
@@ -84,6 +71,10 @@ public class Experiment {
         QuickSort.sort(array);
         long end = System.nanoTime();
 
+        if (!isSorted(array)) {
+            throw new RuntimeException("Array is not sorted correctly.");
+        }
+
         return  end - start;
     }
 
@@ -93,19 +84,23 @@ public class Experiment {
         QuickInsertionSort.sort(array);
         long end = System.nanoTime();
 
+         if (!isSorted(array)) {
+             throw new RuntimeException("Array is not sorted correctly.");
+         }
+
         return end - start;
     }
 
     // Timer for proposed algorithm
     public static long TimerQuickCountingSort(int[] array){
-        int maxVal = SortFunctions.getMax(array);
-        int minVal = SortFunctions.getMin(array);
 
-        long start = System.nanoTime();
-        QuickCountingSort.sort(array, maxVal, minVal);
-        long end = System.nanoTime();
+        QuickCountingSort.SortResults results = QuickCountingSort.sortWithTimers(array);
 
-        return end - start;
+        if (!isSorted(array)) {
+            throw new RuntimeException("Array is not sorted correctly.");
+        }
+
+        return (long) results.totalTime;
     }
 
     /*
@@ -123,8 +118,6 @@ public class Experiment {
 
         int[] nValues = {1000000, 2000000, 3000000};
 
-        warmup(5, nValues[2], nValues[2]);
-
         for (int n : nValues) {
             System.out.println("n:" + n + "       r:" + n);
 
@@ -138,11 +131,11 @@ public class Experiment {
                 // alternating the calling between the randomArr and sortedArr to avoid bias
 
                 if (rep % 2 == 0) {
-                    totalT1 += timeCountingSort(randomArr);
-                    totalT2 += timeCountingSort(sortedArr);
+                    totalT1 += TimerCountingSort(randomArr);
+                    totalT2 += TimerCountingSort(sortedArr);
                 } else {
-                    totalT2 += timeCountingSort(sortedArr);
-                    totalT1 += timeCountingSort(randomArr);
+                    totalT2 += TimerCountingSort(sortedArr);
+                    totalT1 += TimerCountingSort(randomArr);
                 }
             }
 
@@ -160,13 +153,12 @@ public class Experiment {
         int r = 1000000;
         int[] nValues = {1000, 2000, 3000};
 
-        warmup(5, nValues[2], r);
-
         for (int n : nValues){
             System.out.println("n:" + n + "       r:" + r);
 
             long totalPreprocessT1 = 0;
             long totalCountingT1 = 0;
+            long totalT1 = 0;
             long totalT2 = 0;
 
             for (int rep = 0; rep < RUNS; rep++) {
@@ -176,21 +168,29 @@ public class Experiment {
                 // alternating the calling between arrays to avoid bias
 
                 if (rep % 2 == 0) {
-                    totalT2 += timeCountingSort(randomArr);           // counting sort without pre-processing
-                    totalPreprocessT1 += timeQuickSort(randomArr1);   // modified quick sort as preprocessing step
-                    totalCountingT1 += timeCountingSort(randomArr1);  // counting after preprocessing step
+                    QuickCountingSort.SortResults results = QuickCountingSort.sortWithTimers(randomArr);
+                    totalPreprocessT1 += (long)(results.preprocessingTime * 1_000_000);
+                    totalCountingT1 += (long)(results.countingSortTime * 1_000_000);
+                    totalT1 += (long)(results.totalTime * 1_000_000);
+
+                    totalT2 += TimerCountingSort(randomArr1);
                 } else {
-                    totalPreprocessT1 += timeQuickSort(randomArr1);   // modified quick sort as preprocessing step
-                    totalCountingT1 += timeCountingSort(randomArr1);  // counting after preprocessing step
-                    totalT2 += timeCountingSort(randomArr);           // counting sort without pre-processing
+                    QuickCountingSort.SortResults results = QuickCountingSort.sortWithTimers(randomArr1);
+                    totalPreprocessT1 += (long)(results.preprocessingTime * 1_000_000);
+                    totalCountingT1 += (long)(results.countingSortTime * 1_000_000);
+                    totalT1 += (long)(results.totalTime * 1_000_000);
+
+                    totalT2 += TimerCountingSort(randomArr);
                 }
+
             }
 
             double avgPreprocessT1 = (totalPreprocessT1 / (double) RUNS) / 1_000_000.0;
             double avgCountingT1 = (totalCountingT1 / (double) RUNS) / 1_000_000.0;
+            double avgT1 = (totalT1 / (double) RUNS) / 1_000_000.0;
             double avgT2 = (totalT2 / (double) RUNS) / 1_000_000.0;
 
-            System.out.printf("T1 : %.2f ms + %.2f ms\n", avgPreprocessT1, avgCountingT1);
+            System.out.printf("T1 : %.2f + %.2f = %.2f ms\n", avgPreprocessT1, avgCountingT1, avgT1);
             System.out.printf("T2 : %.2f ms\n", avgT2);
             System.out.println();
         }
@@ -199,9 +199,7 @@ public class Experiment {
     public static void experiment3(){
         System.out.println("Running Times in ms for Quicksort, Quicksort with Insertion Sort, and Quicksort with Counting Sort");
 
-        int[] nValues = {1000000,2000000};
-
-        warmup(5, nValues[1], nValues[1]);
+        int[] nValues = {1000000, 2000000};
 
         for(int n : nValues) {
             System.out.println("n:" + n + "       r:" + n);
@@ -220,14 +218,14 @@ public class Experiment {
                 if (rep % 3 == 0) {
                     totalT1 += TimerQuickSort(randomArr);               // classic quick sort
                     totalT2 += TimerQuickInsertionSort(randomArr1);     // modified quick sort with insertion sort
-                    totalT3 += TimerQuickCountingSort(randomArr2);           // proposed algorithm
+                    totalT3 += TimerQuickCountingSort(randomArr2);      // proposed algorithm
                 } else if (rep % 3 == 1) {
                     totalT2 += TimerQuickInsertionSort(randomArr1);     // modified quick sort with insertion sort
-                    totalT3 += TimerQuickCountingSort(randomArr2);           // proposed algorithm
+                    totalT3 += TimerQuickCountingSort(randomArr2);      // proposed algorithm
                     totalT1 += TimerQuickSort(randomArr);               // classical quick sort
 
                 } else {
-                    totalT3 += TimerQuickCountingSort(randomArr2);           // proposed algorithm
+                    totalT3 += TimerQuickCountingSort(randomArr2);      // proposed algorithm
                     totalT1 += TimerQuickSort(randomArr);               // classical quick sort
                     totalT2 += TimerQuickInsertionSort(randomArr1);     // modified quick sort with insertion sort
                 }
@@ -235,7 +233,7 @@ public class Experiment {
 
             double avgT1 = (totalT1 / (double) RUNS) / 1_000_000.0;
             double avgT2 = (totalT2 / (double) RUNS) / 1_000_000.0;
-            double avgT3 = (totalT3 / (double) RUNS) / 1_000_000.0;
+            double avgT3 = (totalT3 / (double) RUNS);
 
             System.out.printf("T1 : %.2f ms\n", avgT1);
             System.out.printf("T2 : %.2f ms\n", avgT2);
@@ -245,6 +243,8 @@ public class Experiment {
     }
 
     public static void main(String[] args) {
+        warmup(10, 5000000, 5000000);
+
         experiment1();
         experiment2();
         experiment3();
