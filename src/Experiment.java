@@ -148,6 +148,10 @@ public class Experiment {
         }
     }
 
+    /*Experiment 2 replicates Table 2 of the paper by comparing counting sort with preprocessing(T1)
+    against counting sort without preprocessing (T2) when r≫n.
+    Note: T1 = time for preprocessing + time for sorting using counting sort after processing*/
+
     public static void experiment2() {
         System.out.println("Running Times in ms for Counting Sort with and without Preprocessing");
         int r = 1000000;
@@ -196,6 +200,11 @@ public class Experiment {
         }
     }
 
+    /*
+    *
+    * Experiment 3 replicates Table 3 of the paper by comparing quicksort (T1), quicksort with insertion sort (T2), and the proposed hybrid algorithm(T3)
+    * when n=r. */
+
     public static void experiment3(){
         System.out.println("Running Times in ms for Quicksort, Quicksort with Insertion Sort, and Quicksort with Counting Sort");
 
@@ -243,7 +252,7 @@ public class Experiment {
     }
 
     public static void main(String[] args) {
-        warmup(10, 5000000, 5000000);
+        warmup(10, 5000000, 5000000); // JVM warmed up before experiments performed
 
         experiment1();
         experiment2();
