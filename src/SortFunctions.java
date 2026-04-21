@@ -1,5 +1,21 @@
 import java.util.Random;
 
+/*
+* This class acts like the utility class that supports the implemenation of the paper as well as the
+* performance analysis.
+* It has function that generate the input for the experiments
+*
+* Implementation of Algorithm 2 of the paper- quickSort_modified
+*
+* A method that partitions the input array for the hybrid sort using the median of three partioning
+* as used in the paper.
+* swap method - for the algorithm implementation
+*
+* getMax - gets the maximum element of the array
+* getMin - gets the minimum element of the array
+*
+* */
+
 public class SortFunctions {
 
     public static int[] createArr(int n, int r) {

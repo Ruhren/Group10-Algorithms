@@ -1,3 +1,9 @@
+/*
+* Implemenation of classical counting sort.
+* This method countingSort() is the actual sort algorithm , sort() function calls countingSort() method to sort
+* if array is null or length = 0 , method returns immediately.
+* */
+
 public class CountingSort {
 
     public static void sort(int[] array) {
