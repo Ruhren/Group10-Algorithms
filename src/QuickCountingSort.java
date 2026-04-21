@@ -1,7 +1,20 @@
+/*
+* This class implements the hybrid sorting algorithm proposed in the research paper.
+* The algorithm combines quicksort-style partitioning with counting sort on subarrays
+ * that become small enough in both size and value range.
+ * The main idea is to avoid applying counting sort on the entire input when the range is large
+ * instead array is partitioned recursively until the threshold condition is satisfied and using counting sort on that partition.
+ *
+ * Implementation also records preprocessing time, counting sort time, and total time to support the project's experiment.
+ *
+ * */
+
+
+
 public class QuickCountingSort {
 
     private static final int THRESHOLD = 1000;
-
+//class that records the timings measured by the algorithm for performance analysis
     public static class SortResults {
         public double preprocessingTime = 0;
         public double countingSortTime = 0;
