@@ -1,8 +1,8 @@
 /*
-* Implemenation of classical counting sort.
-* This method countingSort() is the actual sort algorithm , sort() function calls countingSort() method to sort
-* if array is null or length = 0 , method returns immediately.
-* */
+* Implementation of Classic Counting Sort.
+* A non-comparison based integer sorting algorithm.
+* Extremely fast when the range is small, but cache misses can occur when range exceeds the CPU's cache capacity.
+*/
 
 public class CountingSort {
 

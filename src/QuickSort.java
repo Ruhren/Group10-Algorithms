@@ -1,6 +1,8 @@
 /*
-* This class implements the classical quick sort, this is used in table 3 of paper 2 ,
-* to benchmark the performance of the paper's proposed algorithm with other sorting algorithms like the classical quick sort.*/
+* This class implements Classic QuickSort
+* Performs in-place sorting.
+* Used to benchmark the performance of the paper's proposed algorithm with other sorting algorithms in table 3.
+*/
 
 public class QuickSort {
     public static void sort(int[] arr) {

@@ -1,20 +1,22 @@
 /*
 * This class implements the hybrid sorting algorithm proposed in the research paper.
-* The algorithm combines quicksort-style partitioning with counting sort on subarrays
- * that become small enough in both size and value range.
- * The main idea is to avoid applying counting sort on the entire input when the range is large
- * instead array is partitioned recursively until the threshold condition is satisfied and using counting sort on that partition.
- *
- * Implementation also records preprocessing time, counting sort time, and total time to support the project's experiment.
- *
- * */
+* The algorithm uses QuickSort to recursively partition the data into subarrays.
+* Once a subarray satisfies condition (maxValue - minValue) + (high - low) <= THRESHOLD, it is small enough to fit
+* within the L1 cache without accessing slow main RAM, and so Counting Sort is applied to each subarray
+*
+* Implementation records timing for:
+* - Preprocessing time (QuickSort partitioning)
+* - Counting Sort time (on each subarray),
+* - Total execution time
+*/
 
 
 
 public class QuickCountingSort {
 
     private static final int THRESHOLD = 1000;
-//class that records the timings measured by the algorithm for performance analysis
+
+    // Records the timings measured for performance analysis
     public static class SortResults {
         public double preprocessingTime = 0;
         public double countingSortTime = 0;
@@ -25,11 +27,13 @@ public class QuickCountingSort {
         SortResults results = new SortResults();
         if (arr == null || arr.length == 0) return results;
 
+        // Get min and max
         int min = SortFunctions.getMin(arr);
         int max = SortFunctions.getMax(arr);
 
         hybridSort(arr, 0, arr.length - 1, max, min, results);
 
+        // Calculate total time
         results.totalTime = results.preprocessingTime + results.countingSortTime;
         return results;
     }

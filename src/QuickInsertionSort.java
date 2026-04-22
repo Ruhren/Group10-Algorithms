@@ -1,9 +1,8 @@
 /*
-* This class implements Insertion sort with a preprocessing step - quick sort modified. This is used to
-* benchmark the proposed algorithm with other sorting algorithms in table 3 of paper 2.
-*
-* Here the sort method calls the preprocessing step quickSortModified from the file SortFunctions, then calls
-* insertionSort a method that implements Insertion Sort algorithm.*/
+* This class implements Insertion Sort with a preprocessing step (quickSortModified).
+* Recursively partitions the array, then switches to Insertion Sort for small subarrays.
+* Used to benchmark the proposed algorithm with other sorting algorithms in table 3.
+*/
 
 public class QuickInsertionSort {
     // size at which to switch to insertion sort

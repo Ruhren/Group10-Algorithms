@@ -1,14 +1,15 @@
 /*
- * This class performs all the experiments for the all the analysis of counting sort based hybrid algorithm against the baseline algorithms from the paper
- * The experiments involved :
- * Experiment 1 replicates the table 1 (Time taken to sort an array using classical counting sort , unordered vs ordered input array)
- * Experiment 2 replicates the table 2 (Time take to sort array with counting sort with and without pre-processing)
- * Experiment 3 replicates the table 3 (Running times in ms for quicksort, quicksort with insertion sort, and quicksort with counting sort)
- * */
+ * This class performs all the experiments for the all the analysis of Counting Sort based hybrid algorithm against the
+ * baseline algorithms from the paper
+ *
+ * Experiments involved:
+ * 1 - replicates table 1 (Time taken to sort an array using Classic Counting Sort, unordered vs ordered input array)
+ * 2 - replicates table 2 (Time take to sort array with Counting Sort with and without pre-processing)
+ * 3 - replicates table 3 (Running times in ms for QuickSort, QuickSort with InsertionSort, and QuickSort with CountingSort)
+*/
 
 public class Experiment {
 
-    //Each experiments run multiple times and the average is reported to reduce the noise cause by JVM activity, memory allocation and other background system processes
     private static final int RUNS = 10;
 
     // Helper function to check if array is sorted, important to check the correctness of the sorting
@@ -23,9 +24,9 @@ public class Experiment {
 
     // Helper function to warm up JVM before running experiments,
     /*
-    * JVM warmup is important , before actually timing the algorithms to help stabilize execution
+    * JVM warmup is important, before actually timing the algorithms to help stabilize execution
     * and avoid measuring irrelevant processes like class loading or JIT compilation.
-    * */
+    */
     private static void warmup(int iterations, int n, int r) {
         System.out.println("Starting warmup...");
 
@@ -56,8 +57,8 @@ public class Experiment {
         System.out.println("Finished!");
     }
 
-    // Timer for classic counting sort
-    //Returns elapsed time in nanoseconds
+    // Timer for Classic Counting Sort
+    // Returns elapsed time in nanoseconds
     public static long TimerCountingSort(int[] array) {
 
         long start = System.nanoTime();
@@ -71,8 +72,8 @@ public class Experiment {
         return end - start;
     }
 
-    // Timer for classic quickSort
-    //Returns elapsed time in nanoseconds
+    // Timer for Classic QuickSort
+    // Returns elapsed time in nanoseconds
     public static long TimerQuickSort(int[] array){
         long start = System.nanoTime();
         QuickSort.sort(array);
@@ -86,7 +87,7 @@ public class Experiment {
     }
 
     // Timer for quickSortModified and insertionSort
-    //Returns elapsed time in nanoseconds
+    // Returns elapsed time in nanoseconds
      public static long TimerQuickInsertionSort(int[] array){
         long start = System.nanoTime();
         QuickInsertionSort.sort(array);
@@ -103,7 +104,7 @@ public class Experiment {
     /*  QuickCountingSort.sortWithTimers already measures internal components of the
      algorithm and returns a SortResults object. The total execution time is used
      here for comparison with the baseline algorithms.
-    * */
+    */
     public static long TimerQuickCountingSort(int[] array){
 
         QuickCountingSort.SortResults results = QuickCountingSort.sortWithTimers(array);
@@ -120,10 +121,11 @@ public class Experiment {
      *
      * For the input array n = r, n is the no. of inputs and r is the range
      * Timing is calculated, a Random independent array with n inputs and r range s.t. n = r will be input 1st(T1).
-     * Later for T2, sorted input array in the form {0,1,2,....,n-1} , here to n = r will be input
+     * Later for T2, sorted input array in the form {0,1,2,....,n-1}, here to n = r will be input
      *
-     * Note:  The call order alternates between T1 and T2 across repetitions so that one input
-     * type does not always benefit from being executed first. This helps reduce timing bias.     * */
+     * Note: The call order alternates between T1 and T2 across repetitions so that one input
+     * type does not always benefit from being executed first. This helps reduce timing bias.
+     */
 
     public static void experiment1() {
         System.out.println("Performance Comparison in ms Over Random (T1) and Sorted Inputs (T2)");
@@ -160,9 +162,11 @@ public class Experiment {
         }
     }
 
-    /*Experiment 2 replicates Table 2 of the paper by comparing counting sort with preprocessing(T1)
-    against counting sort without preprocessing (T2) when r ≫ n.
-    Note: T1 = time for preprocessing + time for sorting using counting sort after processing*/
+    /*
+    * Experiment 2 replicates Table 2 of the paper by comparing counting sort with preprocessing(T1)
+    * against counting sort without preprocessing (T2) when r ≫ n.
+    * Note: T1 = time for preprocessing + time for sorting using counting sort after processing
+    */
 
     public static void experiment2() {
         System.out.println("Running Times in ms for Counting Sort with and without Preprocessing");
@@ -214,10 +218,11 @@ public class Experiment {
 
     /*
     *
-    * Experiment 3 replicates Table 3 of the paper by comparing quicksort (T1), quicksort with insertion sort (T2), and proposed quicksort with counting sort hybrid(T3)
-    * when n=r. */
+    * Experiment 3 replicates Table 3 of the paper by comparing QuickSort (T1), QuickSort with InsertionSort (T2),
+    * and proposed QuickSort with Counting Sort Hybrid (T3) when n=r.
+    */
 
-    public static void experiment3(){
+    public static void experiment3() {
         System.out.println("Running Times in ms for Quicksort, Quicksort with Insertion Sort, and Quicksort with Counting Sort");
 
         int[] nValues = {1000000, 2000000};
