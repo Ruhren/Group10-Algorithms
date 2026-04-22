@@ -3,7 +3,7 @@
 **Roles:** 
 - Developer: Kiara 
 - Analyzer: Ruha
-- Documentor: Milena
+- Documenter: Milena
 - Communicator: Liza
 
 **Overview:**
