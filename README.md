@@ -9,34 +9,25 @@
 **Overview:**
 
 This project implements and evaluates a hybrid sorting algorithm based 
-on a research paper. The algorithm combines quicksort partitioning with 
-counting sort on smaller subarrays to improve performance under certain 
+on a research paper. The algorithm combines QuickSort partitioning with 
+Counting Sort on smaller subarrays to improve performance under certain 
 conditions.
 
 **Structure:**
 
-- Experiment.java              
- -Runs all experiments
+- Experiment.java          : Runs all experiments
+- CountingSort.java        : Classic Counting Sort
+- QuickSort.java           : Classic QuickSort
+- QuickInsertionSort.java  : QuickSort + InsertionSort
+- QuickCountingSort.java   : Proposed algorithm
+- SortFunctions.java       : Helper methods (partition, min/max, array generation)
+- README.md                : Project documentation
 
-- CountingSort.java            
--classical counting sort
-- QuickSort.java               
--Standard quicksort
-- QuickInsertionSort.java      
--Quicksort + insertion sort
-- QuickCountingSort.java       
--Proposed hybrid algorithm
-- SortFunctions.java           
--Helper methods (partition, min/max, array generation)
-- README.md                    
--Project documentation
-
-**How run and produce results:**
+**How to run and produce results:**
 
 1. Compile the project
-
    -javac *.java
+   
 2. Run experiments
-
    -java Experiment
 
