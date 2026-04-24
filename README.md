@@ -26,8 +26,8 @@ conditions.
 **How to run and produce results:**
 
 1. Open the terminal in the src folder of this project , then compile the project by running the following :
-   -javac *.java
+   javac *.java
    
 2. Run experiments by running the following command:
-   -java Experiment
+   java Experiment
 
